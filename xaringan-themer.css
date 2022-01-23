@@ -25,8 +25,8 @@
 
 :root {
   /* Fonts */
-  --text-font-family: 'Noto Sans';
-  --text-font-is-google: 1;
+  --text-font-family: 'Open Sans';
+  --text-font-is-google: 0;
   --text-font-family-fallback: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
   --text-font-base: sans-serif;
   --header-font-family: Cabin;
