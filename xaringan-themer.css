@@ -137,15 +137,46 @@ a, a > code {
 .title-slide, .title-slide h1, .title-slide h2, .title-slide h3 {
   color: var(--title-slide-text-color);
 }
+
+.title-slide p {
+  line-height: 12px;
+  margin: 5px;
+}
 .title-slide {
   background-color: var(--title-slide-background-color);
+  background-image: url("./assets/img/artsy.png");
+  background-size: 35%;
+  background-position: right 8% bottom 60%;
+  /*background-clip: content-box;*/
 }
+
+.title-slide img{
+  padding:0;
+  margin:0;
+}
+  
 .title-slide .remark-slide-number {
   display: none;
 }
+
+.art_cap {
+  position: absolute;
+  bottom: 25%;
+  right: 8%;
+  padding-right: 4em;
+  font-size: 0.5em;
+}
+
+.references p {
+  line-height: 16px;
+  font-size: 12pt;
+  padding:0;
+  margin:6px;
+}
+
 /* Two-column layout */
 .left-column {
-  width: 20%;
+  width: 45%;
   height: 92%;
   float: left;
 }
@@ -156,7 +187,7 @@ a, a > code {
   color: #F97B64;
 }
 .right-column {
-  width: 75%;
+  width: 50%;
   float: right;
   padding-top: 1em;
 }

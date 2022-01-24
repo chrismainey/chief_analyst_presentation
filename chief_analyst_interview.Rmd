@@ -17,6 +17,14 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+
+library(RefManageR)
+BibOptions(check.entries = FALSE, bib.style = "authoryear", style = "markdown",
+           dashed = TRUE, cite.style="authoryear", longnamesfirst=FALSE)
+
+#file.name <- system.file("Bib", "", package = "RefManageR")
+bib <- ReadBib("References.bib")
+
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
   fig.width=9, fig.height=3.5, fig.retina=3,
@@ -31,9 +39,14 @@ knitr::opts_chunk$set(
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
-style_duo(primary_color = "#1F4257", secondary_color = "#F97B64"
-          , text_font_family = "Open Sans")
-google_font("Open Sans")
+# google_font("Open Sans")
+# style_duo(primary_color = "#1F4257"
+#           , secondary_color = "#F97B64"
+#           , text_font_family = "Open Sans"
+#           , title_slide_background_image = "./assets/img/artsy.png"
+#           , title_slide_background_position = "right 15% bottom 50%"
+#           , title_slide_background_size = "30%"
+#           )
 # title_slide_background_position
 # title_slide_image("https://github.com/chrismainey/Mainard/tree/master/assets/images/icon.png")
 # style_duo_accent(
@@ -47,20 +60,36 @@ class: title-slide
 
 # Chief Analyst Interview
 
+<br><br>
 
 ### Examples of previous analytical projects
 
 
-<br>
+<br><br><br><br><br>
 
 ### <img src="./assets/img/crop.png" alt="Mainard icon" height="40px" />  Dr Chris Mainey
 
 `r icons::icon_style(icons::fontawesome("twitter"), fill = "#005EB8")` [@chrismainey](https://twitter.com/chrismainey)
 `r icons::icon_style(icons::fontawesome("github"), fill = "#005EB8")` [chrismainey](https://github.com/chrismainey)
 `r icons::icon_style(icons::fontawesome("linkedin"), fill = "#005EB8")`  [chrismainey](https://www.linkedin.com/in/chrismainey/)
+`r icons::icon_style(icons::fontawesome("orcid"), fill = "#005EB8")` [0000-0002-3018-6171](https://orcid.org/0000-0002-3018-6171)
 `r icons::icon_style(icons::fontawesome("globe"), fill = "#005EB8")` [www.mainard.co.uk](https://www.mainard.co.uk)
 
-Presentation and code available for: **https://github.com/chrismainey/chief_analyst_presentation**
+.footnote[Presentation and code available: **https://github.com/chrismainey/chief_analyst_presentation**]
+
+.art_cap[R generative art - inspired by Antonio Sánchez Chinchón - @aschinchon]
+
+
+???
+
+Say hi - introduce myself
+
+As you've no doubt seen from my application, I'm Patient Safety Lead - System Analysis and Delivery with NHS England and Improvement.
+
+Thanks for the opportunity to present, and interview with you today.
+As the brief was to present two projects that demonstrate technical skill.  I'm committed to using modern techniques, and embracing open source approaches, so I've taken the liberty to build the presentation itself in R, and the code used for visualisations etc. is available along with it on GitHub.
+**Go to next slide before saying more about background!!!**
+
 
 
 ---
@@ -87,6 +116,10 @@ Presentation and code available for: **https://github.com/chrismainey/chief_anal
 + Re-imagining standardised mortality ratio (SMR) surveillance
 
 
+???
+
+I'm aiming to illustrate to problems that I was tackling, give concise summaries of the approaches, highlighting the methods and tool sets used.
+
 ---
 class: inverse center middle
 
@@ -96,25 +129,21 @@ class: inverse center middle
 ---
 ## Analysing Incident Data
 
-+ My PhD Project: [thesis available here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
++ My PhD Project: `r Citep(bib, "maineyStatisticalMethodsNHS2020")` [thesis available here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
 
 + Patient Safety movement in England has encourage national incident reporting (NRLS)
  + Route in scandals like Mid Staffs and Bristol
- + Harvard Medical Practice study, 'Too Err is Human', 'An organisation with a memory'
-
---
-
-+ Little use in most quantitative measures of incident reporting
+ + Harvard Medical Practice study `r Cite(bib, "leapeNatureAdverseEvents1991", .opts = list(max.names=2))`, 'Too Err is Human' `r Citep(bib, "kohnErrHumanBuilding2000", .opts = list(max.names=2))`, 'An organisation with a memory' `r Citep(bib, "donaldsonOrganisationMemory2002", .opts = list(max.names=2))`
 
 --
 
 + Desire to compare behaviour across organisations despite this
- + Develop national indicator with appropriate risk adjustment
- + Change over time?
+  + Little use in most quantitative measures of incident reporting
+  + Change over time?
 
 --
 
-+ Elephant in the room: main signal is free-text/
++ Elephant in the room: main signal is free-text:
   + Clinical review
   + NLP / text mining
   
@@ -125,36 +154,110 @@ class: inverse center middle
 ---
 ## Project overview
 
-+ "Ground-clearing" exercise - Literature review
-  + Strengthened view on free-text being main signal
+.left-column[
++ __"Ground-clearing" exercise - Literature review__
+
+  + Strengthened view on free-text signal
   + Data completeness a huge issue
   + Little-to-no useful parameters in dataset
   + No obvious orthogonal outcome
   + Reporting is highly organisation-specific
   
---
+
   
-+ Only quantitative approach is 'counting'
++ __Only quantitative approach is 'counting'__
   + Created a 'panel' dataset - per organisation, per month
   + Other predictors from HES: APC, OP & AE
   + Multi-level model assumption due to clustering
   + Overdispersion modelled various ways
+]
 
 --
 
-+ Output approaches
+.right-column[
++ __Output approaches__
   + Adjusted z-score
   + Funnel plot for cross sectional comparison
   + RA-cusum control charts for change over-time
   
-+ Natural Language Processing
++ __Natural Language Processing__
   + Tokenisation and processing of reports
   + Bag-of-words model
   + Visualisation with 'wordclouds'
   + Predictive modelling of harm level from text (83% accuracy)
+]
 
 ---
-# Analytical methods
+## Analytical methods (1)
+
+### Data preparation
++ SQL Server (ETL) - required manual SAS correction for delimiting
+
++ Creation of calendar table, join all tables and aggregate at per month, per trust.
+
+--
+
+### Predictors / Feature Engineering
+
++ Predictors examined as raw counts, and proportions, as well as 'offset' denominators
+
++ Functional forms examined - multi-collinearity, and splines for time.
+
+--
+
+__Regression based models:__
+
++ Poisson regression `r Citep(bib, "poissonRecherchesProbabiliteJugements1837")` (`R`) as basis for modelling
++ Mixture/compound distribution models
++ Multi-level models
+
+
+???
+
++ Had to start all the way back with how do we get extracts, as NRLS is not static.  Needed system to chose mose recent updated.
+
++ Problems with delimiters - required diagnosing and manual SAS process
+
++ ETL and warehousing
+
++ Extraction into reporting tables as 'counts per day'
+ + HES isn't per day, it's episodes.  So per day, is a spell happingin?
+ + Investiagetd different methods of bed-day calculation, depeing on which you chose, you can call day cases zero time in hospital.
+---
+## Analytical methods (2)
+
+###Advances on Poisson
+
++ Generalized Additive Models (GAM) - smoothed functions of predictors
++ Tree methods: trees, boosting, bagging & Random Forests
++ Neural Networks
+
+#### Use of models
+
++ Indirectly standardised ratio
++ Cross-setcional comparison:
+  + Overdispersion adjusted z-scores
+  + Funnel plots (with additive overdispersion adjustment)
+  
++ Longitudinal
+  + RA 
+
+
+
+
+
+
+---
+
+## Overdispersion
+
+Aggregation / Discretization
+Mis-specified systematic component of a model
+Presence of outliers
+Variation between response probabilities (heterogeneity)
+
+
+In models with fixed variance assumption (e.g. Poisson & Binomial), 
 
 ---
 ## Outputs
@@ -162,10 +265,10 @@ class: inverse center middle
 + HED interactive 'module' allowing - NHSEI prevented launch of this, but tehcniques now being built for NHSEI
 
 + Recommendations for modelling shared with organisations.
- + NHSD now investiating some of methods for SHMI.
+ + NHSD now investigating some of methods for SHMI.
  + NHSEI
  
-+ Creation of `FunnelPlotR` R package, availble on CRAN and donated to NHS-R community.
++ Creation of `FunnelPlotR` R package, available on CRAN and donated to NHS-R community.
 
 
 ---
@@ -177,347 +280,94 @@ class: inverse center middle
 
 ## Re-imagining SMR surveillance
 
-+ When comparing hospital mortality, it is common to adjust for "case-mix."
 
-+ Although it attempts to reduce confounding, it is at the cost of complexity.
++ When comparing hospital mortality, it is common to adjust for "case-mix" to reduce confounding.
 
 + Organisation conflate 'excess' predicted deaths with 'preventable' deaths, and much academic debate
 
 + Commonly measures are:
   + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi)
-  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS(H)%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf)
+  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf)
 
-+ 
-
-
-
----
-
-## Typography
-
-Text can be **bold**, _italic_, ~~strikethrough~~, or `inline code`.
-
-[Link to another slide](#colors).
-
-### Lorem Ipsum
-
-Dolor imperdiet nostra sapien scelerisque praesent curae metus facilisis dignissim tortor. 
-Lacinia neque mollis nascetur neque urna velit bibendum. 
-Himenaeos suspendisse leo varius mus risus sagittis aliquet venenatis duis nec.
-
-- Dolor cubilia nostra nunc sodales
-
-- Consectetur aliquet mauris blandit
-
-- Ipsum dis nec porttitor urna sed
-
----
-name: colors
-
-## Colors
-
-.left-column[
-Text color
-
-[Link Color](#3)
-
-**Bold Color**
-
-_Italic Color_
-
-`Inline Code`
-]
-
-.right-column[
-Lorem ipsum dolor sit amet, [consectetur adipiscing elit (link)](#3), 
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-Erat nam at lectus urna.
-Pellentesque elit ullamcorper **dignissim cras tincidunt (bold)** lobortis feugiat. 
-_Eros donec ac odio tempor_ orci dapibus ultrices. 
-Id porta nibh venenatis cras sed felis eget velit aliquet.
-Aliquam id diam maecenas ultricies mi.
-Enim sit amet 
-`code_color("inline")`
-venenatis urna cursus eget nunc scelerisque viverra.
-]
-
----
-
-# Big Topic or Inverse Slides `#`
-
-## Slide Headings `##`
-
-### Sub-slide Headings `###`
-
-#### Bold Call-Out `####`
-
-This is a normal paragraph text. Only use header levels 1-4.
-
-##### Possible, but not recommended `#####`
-
-###### Definitely don't use h6 `######`
-
----
-
-# Left-Column Headings
-
-.left-column[
-## First
-
-## Second
-
-## Third
-]
-
-.right-column[
-Dolor quis aptent mus a dictum ultricies egestas.
-
-Amet egestas neque tempor fermentum proin massa!
-
-Dolor elementum fermentum pharetra lectus arcu pulvinar.
-]
-
----
-class: inverse center middle
-
-# Topic Changing Interstitial
-
---
-
-```
-class: inverse center middle
-```
-
----
-layout: true
-
-## Blocks
-
----
-
-### Blockquote
-
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
-
----
-
-### Code Blocks
-
-#### R Code
-
-```{r eval=FALSE}
-ggplot(gapminder) +
-  aes(x = gdpPercap, y = lifeExp, size = pop, color = country) +
-  geom_point() +
-  facet_wrap(~year)
-```
-
-#### JavaScript
-
-```js
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
-
----
-
-### More R Code
-
-```{r eval=FALSE}
-dplyr::starwars %>% dplyr::slice_sample(n = 4)
-```
-
----
-
-```{r message=TRUE, eval=requireNamespace("cli", quietly = TRUE)}
-cli::cli_alert_success("It worked!")
-```
-
---
-
-```{r message=TRUE}
-message("Just a friendly message")
-```
-
---
-
-```{r warning=TRUE}
-warning("This could be bad...")
-```
-
---
-
-```{r error=TRUE}
-stop("I hope you're sitting down for this")
-```
-
-
----
-layout: true
-
-## Tables
-
----
-exclude: `r if (requireNamespace("tibble", quietly=TRUE)) "false" else "true"`
-
-```{r eval=requireNamespace("tibble", quietly=TRUE)}
-tibble::as_tibble(mtcars)
-```
-
----
-
-```{r}
-knitr::kable(head(mtcars), format = 'html')
-```
-
----
-exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
-
-```{r eval=requireNamespace("DT", quietly=TRUE)}
-DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4))
-```
-
----
-layout: true
-
-## Lists
-
----
 
 .pull-left[
-#### Here is an unordered list:
++ Commonly make the cross-sectional comparisons with Funnel Plot
 
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
++ __Unanswered question: is trust X 'getting worse'?__
+
 ]
 
 .pull-right[
 
-#### And an ordered list:
+```{r funnel, echo=FALSE, message=FALSE, warning=FALSE}
+library(ragg)
+library(COUNT)
+library(FunnelPlotR)
+library(dplyr)
 
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-]
+data("medpar")
 
----
+model1<- glm(died ~ los + age80 + factor(type), data=medpar, family="binomial")
 
-### And a nested list:
+# Add predictions and write to data base to test database queries
+medpar$preds <- predict(model1, type="response")
 
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
+mod_plot <-
+  medpar %>%
+  group_by(Organisation = factor(provnum)) %>%
+  summarise(observed = sum(died),
+            predicted = sum(preds)) 
 
----
-
-### Nesting an ol in ul in an ol
-
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-  1. level 4 item (ol)
-  1. level 4 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
-
----
-layout: true
-
-## Plots
-
----
-
-```{r plot-example, eval=requireNamespace("ggplot2", quietly=TRUE)}
-library(ggplot2)
-(g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point())
+fp1 <- funnel_plot(numerator=mod_plot$observed,denominator=mod_plot$predicted, 
+            group = mod_plot$Organisation, limit=95
+            ,label = "both"
+            , sr_method = "SHMI"
+            , title = "Example Funnel Plot"
+            , draw_adjusted = FALSE
+             )
+plot(fp1)
 ```
 
+]
+
+???
+
+First point:  reduces confounding, but sometimes increases bias and is at the expense of complexity.
+
 ---
 
-```{r plot-example-themed, eval=requireNamespace("showtext", quietly=TRUE) && requireNamespace("ggplot2", quietly=TRUE)}
-g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) +
-  ggtitle("A Plot About Cars")
+## Monitoring SMRs over time
+
++ SMRs are generally cross-sectional, as they are single time-point calculations.
+
+### Risk-adjusted cusum control charts
+
++ Many control chart methods, but need appropriate error structure
+ + Risk-adjustment
+ + CQC outliers programme  .footnote[1]
+ + Dr Foster's cususm alerts .footnote[2]
+
++ Organisations don't understand it as a 'diagnostic test'
+
+
+
+???
+
+For methods with more of a time dimension, one might consider forecasting of survival methods, in general.
+
+Dr Foster Intelligence created an industry or 'alerting' trusts to risks - based on the methods they CQC 
+
+
+The diagnostic test, the same in any machine learning prediction model, is essential.  In epidemiology and machine learning we might construct a 2x2 table, or confusion matrix, with our predictions v.s. truth.  Assess quality of model, but there are always some false positive and negatives.  There is a trade-off between 'sensitivity' and 'specificity':  You can catch more with a lower threshold, but you'll get more false positives.  Extreme of this is to treat every data point as positive.
+This has resource implications - requiring clinical review and often highlighing data quality or statistical issues.
+
+
+---
+class: references
+
+## References
+
+
+```{r, results='asis', echo=FALSE}
+PrintBibliography(bib)
 ```
-
-.footnote[Requires `{showtext}`]
-
----
-layout: false
-
-## Square image
-
-<center><img src="https://octodex.github.com/images/labtocat.png" alt="GithHub Octocat" height="400px" /></center>
-
-.footnote[GitHub Octocat]
-
----
-
-### Wide image
-
-![A wide image with a diagram of branching in git.](https://docs.github.com/assets/images/help/repository/branching.png)
-
-.footnote[Wide images scale to 100% slide width]
-
----
-
-## Two images
-
-.pull-left[
-![A GitHub Octocat, style "mother hubber"](https://octodex.github.com/images/motherhubbertocat.png)
-]
-
-.pull-right[
-![A GitHub Octocat, style "dinotcat"](https://octodex.github.com/images/dinotocat.png)
-]
-
----
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
----
-class: center, middle
-
-# Thanks!
-
-Slides created via the R packages:
-
-[**xaringan**](https://github.com/yihui/xaringan)<br>
-[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
-
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
