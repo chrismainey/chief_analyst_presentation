@@ -177,8 +177,8 @@ a<- ggplot(cusum_agg, aes(x=Date, y=Ct))+
   ease_aes(default = "linear")
 
 
-animate(a)
-anim_save("agg_cusum.gif", a)
+animate(a, height = 200, width = 400)
+anim_save("agg_cusum.gif")
 
 
 #Plot person-level CUSUM
@@ -199,5 +199,5 @@ b <- ggplot(cusum_pres, aes(x=Patient, y=Ct))+
   transition_reveal(Patient)+
   ease_aes(default = "linear")
 
-animate(b)
-anim_save("person_cusum.gif", b)
+animate(b, height = 200, width = 400)
+anim_save("person_cusum.gif")

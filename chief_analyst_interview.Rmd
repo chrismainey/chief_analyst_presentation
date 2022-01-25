@@ -191,8 +191,7 @@ class: inverse center middle
 ## Analytical methods (1)
 
 ### Data preparation
-+ SQL Server (ETL) - required manual SAS correction for delimiting
-
++ `SQL` Server (ETL) - required manual `SAS` correction for delimiting
 + Creation of calendar table, join all tables and aggregate at per month, per trust.
 
 --
@@ -200,16 +199,14 @@ class: inverse center middle
 ### Predictors / Feature Engineering
 
 + Predictors examined as raw counts, and proportions, as well as 'offset' denominators
-
 + Functional forms examined - multi-collinearity, and splines for time.
 
 --
 
-__Regression based models:__
+### Regression based models:
 
-+ Poisson regression `r Citep(bib, "poissonRecherchesProbabiliteJugements1837")` (`R`) as basis for modelling
-+ Mixture/compound distribution models
-+ Multi-level models
++ Poisson regression `r Citep(bib, "poissonRecherchesProbabiliteJugements1837")` (`R`) as basis, in `R`
++ Mixture/compound distribution models `r Citep(bib, "sellersFlexibleRegressionModel2010")`
 
 
 ???
@@ -221,10 +218,43 @@ __Regression based models:__
 + ETL and warehousing
 
 + Extraction into reporting tables as 'counts per day'
- + HES isn't per day, it's episodes.  So per day, is a spell happingin?
- + Investiagetd different methods of bed-day calculation, depeing on which you chose, you can call day cases zero time in hospital.
+ + HES isn't per day, it's episodes.  So per day, is a spell happening?
+ + Investigated different methods of bed-day calculation, depending on which you chose, you can call day cases zero time in hospital.
+
 ---
+
 ## Analytical methods (2)
+
+.pull-left[
+
+Overdispersion, where conditional variance is greater than conditional mean, occurs when:
+
+1. Aggregation / Discretization
+1. Mis-specified predictors/model
+1. Presence of outliers
+1. Variation between response probabilities (heterogeneity)
+
+__Repeated measures (correlation) __
+
+
+
+]
+
+.pull-right[
+![](./assets/img/ints.gif)
+]
+
+
+
+???
+
++ The big issue here is overdispersion.  For distributions with fixed variance assumption (Poisson and Binomial), there isn't room in the mathematical definition for anything other than perfect.
+
++ That is to say that, the model assumes it's a perfect fit, and it's not. Mainly from:
+
+---
+
+## Analytical methods (3)
 
 ###Advances on Poisson
 
@@ -246,18 +276,6 @@ __Regression based models:__
 
 
 
-
----
-
-## Overdispersion
-
-Aggregation / Discretization
-Mis-specified systematic component of a model
-Presence of outliers
-Variation between response probabilities (heterogeneity)
-
-
-In models with fixed variance assumption (e.g. Poisson & Binomial), 
 
 ---
 ## Outputs
@@ -285,21 +303,23 @@ class: inverse center middle
 
 + Organisation conflate 'excess' predicted deaths with 'preventable' deaths, and much academic debate
 
-+ Commonly measures are:
-  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi)
-  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf)
-
 
 .pull-left[
+
++ Commonly measures are:
+  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi)
+  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf) `r Citep(bib, "poissonRecherchesProbabiliteJugements1837")`
+
 + Commonly make the cross-sectional comparisons with Funnel Plot
 
-+ __Unanswered question: is trust X 'getting worse'?__
++ __Unanswered question:__
+  + 'Is trust "X" getting worse'?
 
 ]
 
 .pull-right[
 
-```{r funnel, echo=FALSE, message=FALSE, warning=FALSE}
+```{r funnel, echo=FALSE, out.height=250, out.width=600, dpi=400, message=FALSE, warning=FALSE}
 library(ragg)
 library(COUNT)
 library(FunnelPlotR)
@@ -340,15 +360,26 @@ First point:  reduces confounding, but sometimes increases bias and is at the ex
 
 + SMRs are generally cross-sectional, as they are single time-point calculations.
 
-### Risk-adjusted cusum control charts
+.pull-left[
+
+### Risk-adjusted cusum charts
 
 + Many control chart methods, but need appropriate error structure
  + Risk-adjustment
  + CQC outliers programme  .footnote[1]
- + Dr Foster's cususm alerts .footnote[2]
+ + Dr Foster's cususm alerts 
 
 + Organisations don't understand it as a 'diagnostic test'
 
+]
+
+.pull-right[
+
+<p style="text-align:center;">
+<img src="./assets/img/agg_cusum.gif" alt="Aggregate cusum chart" width = "400" height="200">
+<img src="./assets/img/person_cusum.gif" alt="Person-level cusum chart" width = "400" height="200">
+</p>
+]
 
 
 ???
@@ -359,7 +390,7 @@ Dr Foster Intelligence created an industry or 'alerting' trusts to risks - based
 
 
 The diagnostic test, the same in any machine learning prediction model, is essential.  In epidemiology and machine learning we might construct a 2x2 table, or confusion matrix, with our predictions v.s. truth.  Assess quality of model, but there are always some false positive and negatives.  There is a trade-off between 'sensitivity' and 'specificity':  You can catch more with a lower threshold, but you'll get more false positives.  Extreme of this is to treat every data point as positive.
-This has resource implications - requiring clinical review and often highlighing data quality or statistical issues.
+This has resource implications - requiring clinical review and often highlighting data quality or statistical issues.
 
 
 ---
