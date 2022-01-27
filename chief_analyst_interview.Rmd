@@ -17,7 +17,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-
+library(ragg)
 library(RefManageR)
 BibOptions(check.entries = FALSE, bib.style = "authoryear", style = "markdown",
            dashed = TRUE, cite.style="authoryear", longnamesfirst=FALSE)
@@ -33,7 +33,8 @@ knitr::opts_chunk$set(
   echo = TRUE,
   message = FALSE, 
   warning = FALSE,
-  hiline = TRUE
+  hiline = TRUE,
+  dev = "ragg_png"
 )
 ```
 
@@ -187,6 +188,13 @@ class: inverse center middle
   + Predictive modelling of harm level from text (83% accuracy)
 ]
 
+???
+
+To quote Andi's, 'it doesn't get more exciting than a systemtic literature search,' but this was the place to start.
+Deeply challenging review, as it was an ill-defined question: 'how has NRLS been used for analysis?'
+
+
+
 ---
 ## Analytical methods (1)
 
@@ -256,26 +264,64 @@ __Repeated measures (correlation) __
 
 ## Analytical methods (3)
 
-###Advances on Poisson
+###Advances on Poisson regression
 
-+ Generalized Additive Models (GAM) - smoothed functions of predictors
-+ Tree methods: trees, boosting, bagging & Random Forests
-+ Neural Networks
++ Generalized Additive Models (GAM) `r Citep(bib, "woodGeneralizedAdditiveModels2006")` - smoothed functions of predictors
++ Tree methods: trees, boosting, bagging & Random Forests `r Citep(bib, c("breimanBaggingPredictors1996", "friedmanStochasticGradientBoosting2002", "breimanRandomForests2001"))`
++ Neural Networks `r Citep(bib, "hastieElementsStatisticalLearning2009")`
 
-#### Use of models
+### Use of models
 
 + Indirectly standardised ratio
-+ Cross-setcional comparison:
-  + Overdispersion adjusted z-scores
-  + Funnel plots (with additive overdispersion adjustment)
-  
++ Cross-sectional comparison :
+  + Overdispersion adjusted z-scores `r Citep(bib, "spiegelhalterHandlingOverdispersionPerformance2005")`
+  + Funnel plots `r Citep(bib, "spiegelhalterFunnelPlotsComparing2005")`
 + Longitudinal
-  + RA 
+  + Control charting  `r Citep(bib, "woodallUseControlCharts2006")`
+
+---
+
+## Natural Language Processing (NLP)
+
+Key that the free-text description contains real signal, but can't manually read ~500,000 per year
+
+
+.pull-left[
++ Quantitative analysis of text
+
++ Text processing / preparation `tidytext`, `quanteda` 
+
++ Visualisation - wordclouds, TF-IDF
+
++ Topic Modelling - LDA `r Citep(bib, "bleiLatentDirichletAllocation2003", .opts = list(max.names=2))`
+
++ Using LDA predictions to predict harm level
+
++ __Class-imbalance__
+
+]
+
+.pull-right[
+<p style="text-align:center;">
+<img src="./assets/img/wordcloud.png" alt="Wordclouds showing stage of NRLS cleaning" width = "400" height="350">
+</P>
+]
+
+???
+
+Statistical methods so far are interesting, but missing the major issue of the text.
+The key issue here is that there are ~500,000 reports per year.
+National Clinical review team of 3 -5 depending on project, so they focus on severe harm and death.
+With routing research and other work, maybe a further 2% are systematically reviewed.
+This means 98% are not reviewerd and, to my mind, 'begging' for some methods of finding a signal.
+
+This is where text methods come in.
 
 
 
-
-
+Class imbalance is the major issue here:  that is where there are different size classes (or groups) to predict.
+As said before Severe and and Death account for >1%.
+Naturally poorer at predicting these, but interesitng finding what that Random Forest methods performed better than others against class imbalance ~83% accuracy, and Naive Bayes performed well for minority classess by not majority.
 
 ---
 ## Outputs
@@ -307,8 +353,8 @@ class: inverse center middle
 .pull-left[
 
 + Commonly measures are:
-  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi)
-  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf) `r Citep(bib, "poissonRecherchesProbabiliteJugements1837")`
+  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi) `r Citep(bib, "campbellDevelopingSummaryHospital2012", .opts = list(max.names=2))`
+  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf) `r Citep(bib, "jarmanExplainingDifferencesEnglish1999", .opts = list(max.names=2))`
 
 + Commonly make the cross-sectional comparisons with Funnel Plot
 
@@ -319,7 +365,7 @@ class: inverse center middle
 
 .pull-right[
 
-```{r funnel, echo=FALSE, out.height=250, out.width=600, dpi=400, message=FALSE, warning=FALSE}
+```{r funnel, echo=FALSE, out.height=300, out.width=600, fig.height=4, fig.width=6, dpi=400, message=FALSE, warning=FALSE}
 library(ragg)
 library(COUNT)
 library(FunnelPlotR)
@@ -394,11 +440,72 @@ This has resource implications - requiring clinical review and often highlightin
 
 
 ---
+
+## Project overview
+
++ __Aim: Reduce confusion of users, and strike the balance between true and false positives__
+
+--
+
++ Initially applied to HSMR:
+  + SHMI commonly uses a 'VLAD' chart `r Citep(bib, "lovegroveMonitoringPerformanceCardiac1999", .opts = list(max.names=2))` , but control limits are CUSUMs. `r Citep(bib, "sherlaw-johnsonMethodDetectingRuns2005", .opts = list(max.names=2))`
+  + SHMI planned for second phase (after I left UHB).
+  
+
++ Unclear why there were difference control limits and methods.
+  + Which was 'best'? and do the compare?
+  
+--
+
+### Statistical and literature review process
+
++ Aggregation
++ Trigger limit
++ 'Window' size
++ __Both claimed false discovery rate (FDR) of 0.1%__
+
+---
+
+### Developing methods
+
+.pull-left[
+### CQC
++ Data are transformed to z-scores
++ Global trigger (5.48) - can convert average run-length to FDR, and set threshold `r Citep(bib, c("griggNullSteadystateDistribution2008", "carequalitycommissioncqcNHSAcuteHospitals2014"), .opts = list(max.names=2))`
++ Applicable to other indicators and groupings, subject to transformation
++ Tested in R, translated in `SQL` procedures for calculation against all trusts and diagnosis groups
+]
+
+.pull-right[
+### DFI
++ Binomial assumption and false positives used to set threshold through simulation. `r Citep(bib,"bottlePredictingFalseAlarm2011", .opts = list(max.names=2))`
++ Intractable to calculate each month, and authors fitted a set of prediction equations.
++ Wrote program to solve for each trust/diagnosis group with non-linear optimiser (`R`)
++ Translated into similar `SQL` process, with call to `R`
+
+]
+
+<br>
+### Other issues
+
++ Takes too long: Iterative - 'quirky update'.
++ Different aggregation has to be considered in design, and progress routes, through analytical tool.
++ Educate trusts on false-positive argument and build confidence.
+
+---
 class: references
 
-## References
-
+### References (1)
 
 ```{r, results='asis', echo=FALSE}
-PrintBibliography(bib)
+PrintBibliography(bib, end = 15)
+```
+
+---
+class: references
+
+### References (2)
+
+```{r, results='asis', echo=FALSE}
+PrintBibliography(bib, start = 16)
 ```

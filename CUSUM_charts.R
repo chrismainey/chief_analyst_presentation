@@ -169,10 +169,11 @@ a<- ggplot(cusum_agg, aes(x=Date, y=Ct))+
   scale_shape_manual(values=c(16,4))+
   scale_colour_manual(values=c("#51E85E",2))+
   scale_y_continuous(name="CUSUM value",limits=c(0,6), breaks = seq(6))+
+  scale_x_datetime(name="Date", breaks = "2 month", date_labels = "%b-%y")+
   guides(size = "none")  +
+  theme_minimal()+
   theme(axis.text.x = element_text(angle=45, hjust = 1),
         legend.position = "bottom")+
-  theme_minimal()+
   transition_reveal(rowno)+
   ease_aes(default = "linear")
 

@@ -4,7 +4,7 @@
     <title>Chief Analyst Interview - The Health Economics Unit</title>
     <meta charset="utf-8" />
     <meta name="author" content="Chris Mainey" />
-    <meta name="date" content="2022-01-25" />
+    <meta name="date" content="2022-01-27" />
     <script src="chief_analyst_interview_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -147,6 +147,13 @@ class: inverse center middle
   + Predictive modelling of harm level from text (83% accuracy)
 ]
 
+???
+
+To quote Andi's, 'it doesn't get more exciting than a systemtic literature search,' but this was the place to start.
+Deeply challenging review, as it was an ill-defined question: 'how has NRLS been used for analysis?'
+
+
+
 ---
 ## Analytical methods (1)
 
@@ -166,7 +173,7 @@ class: inverse center middle
 ### Regression based models:
 
 + Poisson regression &lt;a name=cite-poissonRecherchesProbabiliteJugements1837&gt;&lt;/a&gt;([Poisson, 1837](#bib-poissonRecherchesProbabiliteJugements1837)) (`R`) as basis, in `R`
-+ Mixture/compound distribution models &lt;a name=cite-sellersFlexibleRegressionModel2010&gt;&lt;/a&gt;([Sellers and Shmueli, 2010a](https://doi.org/10/cn6mjv))
++ Mixture/compound distribution models &lt;a name=cite-sellersFlexibleRegressionModel2010&gt;&lt;/a&gt;([Sellers and Shmueli, 2010](https://doi.org/10/cn6mjv))
 
 
 ???
@@ -216,26 +223,64 @@ __Repeated measures (correlation) __
 
 ## Analytical methods (3)
 
-###Advances on Poisson
+###Advances on Poisson regression
 
-+ Generalized Additive Models (GAM) - smoothed functions of predictors
-+ Tree methods: trees, boosting, bagging &amp; Random Forests
-+ Neural Networks
++ Generalized Additive Models (GAM) &lt;a name=cite-woodGeneralizedAdditiveModels2006&gt;&lt;/a&gt;([Wood, 2006](#bib-woodGeneralizedAdditiveModels2006)) - smoothed functions of predictors
++ Tree methods: trees, boosting, bagging &amp; Random Forests &lt;a name=cite-breimanBaggingPredictors1996&gt;&lt;/a&gt;&lt;a name=cite-friedmanStochasticGradientBoosting2002&gt;&lt;/a&gt;&lt;a name=cite-breimanRandomForests2001&gt;&lt;/a&gt;([Breiman, 1996](https://doi.org/10/fm3fwj); [Friedman, 2002](https://doi.org/10/fxb956); [Breiman, 2001a](https://doi.org/10/d8zjwq))
++ Neural Networks &lt;a name=cite-hastieElementsStatisticalLearning2009&gt;&lt;/a&gt;([Hastie, Tibshirani, and Friedman, 2009](#bib-hastieElementsStatisticalLearning2009))
 
-#### Use of models
+### Use of models
 
 + Indirectly standardised ratio
-+ Cross-setcional comparison:
-  + Overdispersion adjusted z-scores
-  + Funnel plots (with additive overdispersion adjustment)
-  
++ Cross-sectional comparison :
+  + Overdispersion adjusted z-scores &lt;a name=cite-spiegelhalterHandlingOverdispersionPerformance2005&gt;&lt;/a&gt;([Spiegelhalter, 2005b](https://doi.org/10/cdmxpn))
+  + Funnel plots &lt;a name=cite-spiegelhalterFunnelPlotsComparing2005&gt;&lt;/a&gt;([Spiegelhalter, 2005a](https://doi.org/10/fq7z8t))
 + Longitudinal
-  + RA 
+  + Control charting  &lt;a name=cite-woodallUseControlCharts2006&gt;&lt;/a&gt;([Woodall, 2006](https://doi.org/10/gjzktt))
+
+---
+
+## Natural Language Processing (NLP)
+
+Key that the free-text description contains real signal, but can't manually read ~500,000 per year
+
+
+.pull-left[
++ Quantitative analysis of text
+
++ Text processing / preparation `tidytext`, `quanteda` 
+
++ Visualisation - wordclouds, TF-IDF
+
++ Topic Modelling - LDA &lt;a name=cite-bleiLatentDirichletAllocation2003&gt;&lt;/a&gt;([Blei Ng, et al., 2003](#bib-bleiLatentDirichletAllocation2003))
+
++ Using LDA predictions to predict harm level
+
++ __Class-imbalance__
+
+]
+
+.pull-right[
+&lt;p style="text-align:center;"&gt;
+&lt;img src="./assets/img/wordcloud.png" alt="Wordclouds showing stage of NRLS cleaning" width = "400" height="350"&gt;
+&lt;/P&gt;
+]
+
+???
+
+Statistical methods so far are interesting, but missing the major issue of the text.
+The key issue here is that there are ~500,000 reports per year.
+National Clinical review team of 3 -5 depending on project, so they focus on severe harm and death.
+With routing research and other work, maybe a further 2% are systematically reviewed.
+This means 98% are not reviewerd and, to my mind, 'begging' for some methods of finding a signal.
+
+This is where text methods come in.
 
 
 
-
-
+Class imbalance is the major issue here:  that is where there are different size classes (or groups) to predict.
+As said before Severe and and Death account for &gt;1%.
+Naturally poorer at predicting these, but interesitng finding what that Random Forest methods performed better than others against class imbalance ~83% accuracy, and Naive Bayes performed well for minority classess by not majority.
 
 ---
 ## Outputs
@@ -267,8 +312,8 @@ class: inverse center middle
 .pull-left[
 
 + Commonly measures are:
-  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi)
-  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf) ([Poisson, 1837](#bib-poissonRecherchesProbabiliteJugements1837))
+  + [Summary Hospital-level Mortality Indicator (SHMI)](https://digital.nhs.uk/data-and-information/publications/ci-hub/summary-hospital-level-mortality-indicator-shmi) &lt;a name=cite-campbellDevelopingSummaryHospital2012&gt;&lt;/a&gt;([Campbell Jacques, et al., 2012](https://doi.org/10/gb3r9t))
+  + [Dr Foster Hospital Standardised Mortality Ratio (HSMR)](https://www.nhs.uk/NHSEngland/Hospitalmortalityrates/Documents/090424%20MS%28H%29%20-%20NHS%20Choices%20HSMR%20Publication%20-%20Presentation%20-%20Annex%20C.pdf) &lt;a name=cite-jarmanExplainingDifferencesEnglish1999&gt;&lt;/a&gt;([Jarman Gault, et al., 1999](https://doi.org/10/fkkfm9))
 
 + Commonly make the cross-sectional comparisons with Funnel Plot
 
@@ -279,7 +324,7 @@ class: inverse center middle
 
 .pull-right[
 
-&lt;img src="chief_analyst_interview_files/figure-html/funnel-1.png" width="600" height="250" /&gt;
+&lt;img src="chief_analyst_interview_files/figure-html/funnel-1.png" width="600" height="300" /&gt;
 
 ]
 
@@ -327,16 +372,127 @@ This has resource implications - requiring clinical review and often highlightin
 
 
 ---
+
+## Project overview
+
++ __Aim: Reduce confusion of users, and strike the balance between true and false positives__
+
+--
+
++ Initially applied to HSMR:
+  + SHMI commonly uses a 'VLAD' chart &lt;a name=cite-lovegroveMonitoringPerformanceCardiac1999&gt;&lt;/a&gt;([Lovegrove Sherlaw-Johnson, et al., 1999](https://doi.org/10/dtsvbg)) , but control limits are CUSUMs. &lt;a name=cite-sherlaw-johnsonMethodDetectingRuns2005&gt;&lt;/a&gt;([Sherlaw-Johnson, 2005](https://doi.org/10/dpvrft))
+  + SHMI planned for second phase (after I left UHB).
+  
+
++ Unclear why there were difference control limits and methods.
+  + Which was 'best'? and do the compare?
+  
+--
+
+### Statistical and literature review process
+
++ Aggregation
++ Trigger limit
++ 'Window' size
++ __Both claimed false discovery rate (FDR) of 0.1%__
+
+---
+
+### Developing methods
+
+.pull-left[
+### CQC
++ Data are transformed to z-scores
++ Global trigger (5.48) - can convert average run-length to FDR, and set threshold &lt;a name=cite-griggNullSteadystateDistribution2008&gt;&lt;/a&gt;&lt;a name=cite-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;([Grigg and Spiegelhalter, 2008](https://doi.org/10/bgvkdx); [Commission", 2014](#bib-carequalitycommissioncqcNHSAcuteHospitals2014))
++ Applicable to other indicators and groupings, subject to transformation
++ Tested in R, translated in `SQL` procedures for calculation against all trusts and diagnosis groups
+]
+
+.pull-right[
+### DFI
++ Binomial assumption and false positives used to set threshold through simulation. &lt;a name=cite-bottlePredictingFalseAlarm2011&gt;&lt;/a&gt;([Bottle and Aylin, 2011](https://doi.org/10/cbr4rq))
++ Intractable to calculate each month, and authors fitted a set of prediction equations.
++ Wrote program to solve for each trust/diagnosis group with non-linear optimiser (`R`)
++ Translated into similar `SQL` process, with call to `R`
+
+]
+
+&lt;br&gt;
+### Other issues
+
++ Takes too long: Iterative - 'quirky update'.
++ Different aggregation has to be considered in design, and progress routes, through analytical tool.
++ Educate trusts on false-positive argument and build confidence.
+
+---
 class: references
 
-## References
+### References (1)
 
+&lt;a name=bib-bleiLatentDirichletAllocation2003&gt;&lt;/a&gt;[Blei, D. M., A. Y.
+Ng, and M. I. Jordan](#cite-bleiLatentDirichletAllocation2003) (2003).
+"Latent dirichlet allocation". In: _J. Mach. Learn. Res._ 3, pp.
+993-1022. ISSN: 1532-4435.
+
+&lt;a name=bib-bottlePredictingFalseAlarm2011&gt;&lt;/a&gt;[Bottle, A. and P.
+Aylin](#cite-bottlePredictingFalseAlarm2011) (2011). "Predicting the
+false alarm rate in multi-institution mortality monitoring". In: _The
+Journal of the Operational Research Society_ 62.9, pp. 1711-1718. ISSN:
+01605682, 14769360. DOI: [10/cbr4rq](https://doi.org/10%2Fcbr4rq).
+
+&lt;a name=bib-breimanBaggingPredictors1996&gt;&lt;/a&gt;[Breiman,
+L.](#cite-breimanBaggingPredictors1996) (1996). "Bagging predictors".
+In: _Machine Learning_ 24.2, pp. 123-140. ISSN: 1573-0565. DOI:
+[10/fm3fwj](https://doi.org/10%2Ffm3fwj).
+
+&lt;a name=bib-breimanRandomForests2001&gt;&lt;/a&gt;[Breiman,
+L.](#cite-breimanRandomForests2001) (2001a). "Random Forests". In:
+_Machine Learning_ 45.1, pp. 5-32. ISSN: 08856125. DOI:
+[10/d8zjwq](https://doi.org/10%2Fd8zjwq).
+
+&lt;a name=bib-campbellDevelopingSummaryHospital2012&gt;&lt;/a&gt;[Campbell, M. J.,
+R. M. Jacques, J. Fotheringham, et
+al.](#cite-campbellDevelopingSummaryHospital2012) (2012). "Developing a
+summary hospital mortality index: retrospective analysis in English
+hospitals over five years". In: _BMJ_ 344, p. e1001. DOI:
+[10/gb3r9t](https://doi.org/10%2Fgb3r9t).
+
+&lt;a
+name=bib-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;[Commission",
+". Q.](#cite-carequalitycommissioncqcNHSAcuteHospitals2014) (2014).
+_NHS acute hospitals: Statistical Methodology_. Care Quality Commission
+(CQC).
 
 &lt;a name=bib-donaldsonOrganisationMemory2002&gt;&lt;/a&gt;[Donaldson,
 L.](#cite-donaldsonOrganisationMemory2002) (2002). "An organisation
 with a memory". In: _Clinical Medicine (London, England)_ 2.5, pp.
 452-7. ISSN: 1470-2118 (Print) 1470-2118. DOI:
 [10/gfz5w4](https://doi.org/10%2Fgfz5w4).
+
+&lt;a name=bib-friedmanStochasticGradientBoosting2002&gt;&lt;/a&gt;[Friedman, J.
+H.](#cite-friedmanStochasticGradientBoosting2002) (2002). "Stochastic
+Gradient Boosting". In: _Computational Statistics &amp; Data Analysis_ 38,
+pp. 367-378. DOI: [10/fxb956](https://doi.org/10%2Ffxb956).
+
+&lt;a name=bib-griggNullSteadystateDistribution2008&gt;&lt;/a&gt;[Grigg, O. and D.
+Spiegelhalter](#cite-griggNullSteadystateDistribution2008) (2008). "The
+null steady-state distribution of the CUSUM statistic". In:
+_Technometrics : a journal of statistics for the physical, chemical,
+and engineering sciences_. DOI:
+[10/bgvkdx](https://doi.org/10%2Fbgvkdx).
+
+&lt;a name=bib-hastieElementsStatisticalLearning2009&gt;&lt;/a&gt;[Hastie, T., R.
+Tibshirani, and J.
+Friedman](#cite-hastieElementsStatisticalLearning2009) (2009). _The
+Elements of Statistical Learning : Data Mining, Inference, and
+Prediction_. 2nd ed. Springer Series in Statistics. New York,
+NETHERLANDS: Springer. ISBN: 978-0-387-84858-7.
+
+&lt;a name=bib-jarmanExplainingDifferencesEnglish1999&gt;&lt;/a&gt;[Jarman, B., S.
+Gault, B. Alves, et al.](#cite-jarmanExplainingDifferencesEnglish1999)
+(1999). "Explaining differences in English hospital death rates using
+routinely collected data". In: _BMJ_ 318.7197, pp. 1515-1520. ISSN:
+0959-8138 1468-5833. DOI: [10/fkkfm9](https://doi.org/10%2Ffkkfm9).
 
 &lt;a name=bib-kohnErrHumanBuilding2000&gt;&lt;/a&gt;[Kohn, L. T., J. M. Corrigan,
 and M. S. Donaldson](#cite-kohnErrHumanBuilding2000) (2000). "To Err is
@@ -350,9 +506,22 @@ Brennan, N. Laird, et al.](#cite-leapeNatureAdverseEvents1991) (1991).
 England Journal of Medicine_ 324.6, pp. 377-384. DOI:
 [10/fhvzbs](https://doi.org/10%2Ffhvzbs).
 
+&lt;a name=bib-lovegroveMonitoringPerformanceCardiac1999&gt;&lt;/a&gt;[Lovegrove,
+J., C. Sherlaw-Johnson, O. Valencia, et
+al.](#cite-lovegroveMonitoringPerformanceCardiac1999) (1999).
+"Monitoring the Performance of Cardiac Surgeons". In: _The Journal of
+the Operational Research Society_ 50.7. Publisher: Palgrave Macmillan
+Journals, pp. 684-689. ISSN: 01605682, 14769360. DOI:
+[10/dtsvbg](https://doi.org/10%2Fdtsvbg).
+
 &lt;a name=bib-maineyStatisticalMethodsNHS2020&gt;&lt;/a&gt;[Mainey,
 C.](#cite-maineyStatisticalMethodsNHS2020) (2020). "Statistical methods
 for NHS incident reporting data". London.
+
+---
+class: references
+
+### References (2)
 
 &lt;a name=bib-poissonRecherchesProbabiliteJugements1837&gt;&lt;/a&gt;[Poisson, S.
 D.](#cite-poissonRecherchesProbabiliteJugements1837) (1837).
@@ -361,10 +530,42 @@ en matiÃ¨re civile: prÃ©cÃ©dÃ©es des rÃ¨gles gÃ©nÃ©rales du calcul
 probabilitÃ©s_. Bachelier.
 
 &lt;a name=bib-sellersFlexibleRegressionModel2010&gt;&lt;/a&gt;[Sellers, K. F. and
-G. Shmueli](#cite-sellersFlexibleRegressionModel2010) (2010a). "A
+G. Shmueli](#cite-sellersFlexibleRegressionModel2010) (2010). "A
 flexible regression model for count data". In: _Annals of Applied
 Statistics_ 4.2, pp. 943-961. ISSN: 1932-6157. DOI:
 [10/cn6mjv](https://doi.org/10%2Fcn6mjv).
+
+&lt;a
+name=bib-sherlaw-johnsonMethodDetectingRuns2005&gt;&lt;/a&gt;[Sherlaw-Johnson,
+C.](#cite-sherlaw-johnsonMethodDetectingRuns2005) (2005). "A Method for
+Detecting Runs of Good and Bad Clinical Outcomes on Variable
+Life-Adjusted Display (VLAD) Charts". In: _Health Care Management
+Science_ 8.1, pp. 61-65. ISSN: 1572-9389. DOI:
+[10/dpvrft](https://doi.org/10%2Fdpvrft).
+
+&lt;a name=bib-spiegelhalterFunnelPlotsComparing2005&gt;&lt;/a&gt;[Spiegelhalter,
+D. J.](#cite-spiegelhalterFunnelPlotsComparing2005) (2005a). "Funnel
+plots for comparing institutional performance". In: _Statistics in
+Medicine_ 24.8, pp. 1185-202. ISSN: 0277-6715 (Print) 0277-6715
+(Linking). DOI: [10/fq7z8t](https://doi.org/10%2Ffq7z8t).
+
+&lt;a
+name=bib-spiegelhalterHandlingOverdispersionPerformance2005&gt;&lt;/a&gt;[Spiegelhalter,
+D. J.](#cite-spiegelhalterHandlingOverdispersionPerformance2005)
+(2005b). "Handling over-dispersion of performance indicators". In:
+_Quality and Safety in Health Care_ 14.5, pp. 347-351. DOI:
+[10/cdmxpn](https://doi.org/10%2Fcdmxpn).
+
+&lt;a name=bib-woodGeneralizedAdditiveModels2006&gt;&lt;/a&gt;[Wood, S.
+N.](#cite-woodGeneralizedAdditiveModels2006) (2006). _Generalized
+Additive Models: An Introduction with R_. Taylor &amp; Francis. ISBN:
+978-1-58488-474-3.
+
+&lt;a name=bib-woodallUseControlCharts2006&gt;&lt;/a&gt;[Woodall, W.
+H.](#cite-woodallUseControlCharts2006) (2006). "The Use of Control
+Charts in Health-Care and Public-Health Surveillance". In: _Journal of
+Quality Technology_ 38.2, pp. 89-104. ISSN: 0022-4065. DOI:
+[10/gjzktt](https://doi.org/10%2Fgjzktt).
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
