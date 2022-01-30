@@ -38,24 +38,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-# google_font("Open Sans")
-# style_duo(primary_color = "#1F4257"
-#           , secondary_color = "#F97B64"
-#           , text_font_family = "Open Sans"
-#           , title_slide_background_image = "./assets/img/artsy.png"
-#           , title_slide_background_position = "right 15% bottom 50%"
-#           , title_slide_background_size = "30%"
-#           )
-# title_slide_background_position
-# title_slide_image("https://github.com/chrismainey/Mainard/tree/master/assets/images/icon.png")
-# style_duo_accent(
-#   primary_color = "#1381B0",
-#   secondary_color = "#FF961C",
-#   inverse_header_color = "#FFFFFF"
-# )
-```
 
 class: title-slide
 
@@ -87,12 +69,10 @@ __End 30 seconds__!
 
 Say hi - introduce myself
 
-As you've no doubt seen from my application, I'm Patient Safety Lead - System Analysis and Delivery with NHS England and Improvement. I'm ax experienced analyst, data scientist and statistician, used to lead NHS data teams.  I'm a senior fellow in the NHS-R community and keen to help the profession move forward.
+I'm Patient Safety Lead - System Analysis and Delivery with NHS England and Improvement. I'm an experienced analyst, data scientist and statistician, used to leading NHS data teams.  I'm a senior fellow in the NHS-R community, I contribute to the wider analyst community, and keen to help the profession move forward.
 
-Thanks for the opportunity to present, and interview today.
-As the brief was to present two projects that demonstrate my expertise.  I'm committed to using modern techniques, and embracing open source approaches.  In part to demonstrate this, the presentation is written in Rmarkdown, visulisations codes and code provided on GitHub.
-**Go to next slide before saying more about background!!!**
-
+Thanks for the opportunity to and interview today.
+As the brief was to present two projects that demonstrate my data science expertise.  I'm committed to using modern techniques, and embracing open source approaches.  In part to demonstrate this, the presentation is written in Rmarkdown, wit visualisation and code on GitHub.
 
 ---
 
@@ -103,7 +83,7 @@ As the brief was to present two projects that demonstrate my expertise.  I'm com
 ### 1. Developing analytical methods for NHS incident reporting data
 
 <br><br>
-### 2. Re-imagining standardised mortality ratio (SMR) surveillance
+### 2. Re-imagining standardised mortality ratio (SMR) surveillance in HED
 
 
 ???
@@ -147,15 +127,15 @@ class: inverse center middle
 
 __End 2:30__
 
-Patient safety movement is reasonably new, established in the 80 through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often likened to high-risk industries, and incident reporting was proted over from them, but fairly different in healthcare.
+Patient safety movement is reasonably new, established in the 80s through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often 'imported' from high-risk industries, and incident reporting was ported over, but fairly different in healthcare.
 
 + National Reporting and Learning System (NRLS) is the national repository for incident data
 
-+ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety disciplin - about encouraging reporitng to learn.
++ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety discipline - about encouraging reporting to learn.
 
 + Still desire to understand reporting patterns, but clinical review is main way to use signal.
 
-+ My project was to examine staitstical modelling approaches for these data.
++ My project was to examine statistical modelling approaches for these data.
 
 ---
 ## Project overview
@@ -186,7 +166,8 @@ Patient safety movement is reasonably new, established in the 80 through the lik
   + Visualisation of organisations
     + Cross-sectional
     + Longitudinal
-  
+
+<br>
 + __Natural Language Processing__
   + Examining how to create a useful dataset
   + Visualisation of processes
@@ -297,12 +278,11 @@ __End 6:00__
 
 + Indirectly standardised ratio
 
-+ Cross-sectional comparison:
-  + Overdispersion adjusted z-scores `r Citep(bib, "spiegelhalterHandlingOverdispersionPerformance2005")`
-  + Funnel plots `r Citep(bib, "spiegelhalterFunnelPlotsComparing2005")`
++ Overdispersion adjusted z-scores `r Citep(bib, "spiegelhalterHandlingOverdispersionPerformance2005")`
 
-+ Longitudinal
-  + Control charting  `r Citep(bib, "woodallUseControlCharts2006")`
++ Funnel plots `r Citep(bib, "spiegelhalterFunnelPlotsComparing2005")`
+
++ Control charting  `r Citep(bib, "woodallUseControlCharts2006")`
 
 ???
 
@@ -361,12 +341,12 @@ Naturally poorer at predicting these, but interesting finding what that Random F
 ---
 ## Outputs
 
-+ HED interactive 'module' allowing - NHSEI prevented launch of this, but techniques now being built for NHSEI
++ HED interactive 'module' allowing - NHSEI prevented launch of this, but techniques used to improve several other parts of HED.
 
 + Recommendations for modelling shared with organisations.
 
  + NHSD now investigating some of methods for SHMI.
- + NHSEI simple method of 'under-reporting' greatly advanced by these models
+ + NHSEI simple method of 'under-reporting' greatly advanced by these models.
  + NLP methods have been recognised as way forward to make better use of data.
  
 + In moving to NHSEI patient safety team, I am starting to implement these methods for national team.
@@ -380,7 +360,7 @@ __End 8:00__
 ---
 class: inverse center middle
 
-# Re-imagining standardised mortality ratio (SMR) surveillance
+# Re-imagining standardised mortality ratio (SMR) surveillance in HED
 
 ---
 
@@ -408,7 +388,6 @@ class: inverse center middle
 .pull-right[
 
 ```{r funnel, echo=FALSE, out.height=300, out.width=600, fig.height=4, fig.width=6, dpi=400, message=FALSE, warning=FALSE}
-library(ragg)
 library(COUNT)
 library(FunnelPlotR)
 library(dplyr)
@@ -536,6 +515,12 @@ This has resource implications - requiring clinical review and often highlightin
 + Takes too long: Iterative - 'quirky update'.
 + Different aggregation has to be considered in design, and progress routes, through analytical tool.
 + Educate trusts on false-positive argument and build confidence.
+
+---
+
+# Final Output
+
+
 
 ---
 class: references
