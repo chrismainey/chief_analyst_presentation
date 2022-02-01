@@ -38,6 +38,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r R-Lang, echo=FALSE}
+# Choose the language at the beginning of your script or knit from external file
+lang <- c("EN", "FR")[1]
+```
 
 class: title-slide
 
@@ -101,11 +105,24 @@ class: inverse center middle
 ---
 ## Analysing Incident Data
 
-+ My PhD Project: `r Citep(bib, "maineyStatisticalMethodsNHS2020")` [thesis available here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
++ My PhD Project: `r Citep(bib, "maineyStatisticalMethodsNHS2020")` thesis available [here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
 
 + Patient Safety movement in England has encourage national incident reporting (NRLS)
  + Routed in visible failures in care such as Mid Staffs and Bristol
  + Harvard Medical Practice study `r Cite(bib, "leapeNatureAdverseEvents1991", .opts = list(max.names=2))`, 'Too Err is Human' `r Citep(bib, "kohnErrHumanBuilding2000", .opts = list(max.names=2))`, 'An organisation with a memory' `r Citep(bib, "donaldsonOrganisationMemory2002", .opts = list(max.names=2))`
+
+???
+Patient safety movement is reasonably new, established in the 80s through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often 'imported' from high-risk industries, and incident reporting was ported over, but fairly different in healthcare.
+
++ National Reporting and Learning System (NRLS) is the national repository for incident data
+
+### Commonly, with a national dataset there is a desire to use it for benchmarking
+
+__End 2:30__
+
++ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety discipline - about encouraging reporting to learn.
+
++ Still desire to understand reporting patterns, but clinical review is main way to use signal.
 
 --
 
@@ -125,17 +142,7 @@ class: inverse center middle
 
 ???
 
-__End 2:30__
-
-Patient safety movement is reasonably new, established in the 80s through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often 'imported' from high-risk industries, and incident reporting was ported over, but fairly different in healthcare.
-
-+ National Reporting and Learning System (NRLS) is the national repository for incident data
-
-+ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety discipline - about encouraging reporting to learn.
-
-+ Still desire to understand reporting patterns, but clinical review is main way to use signal.
-
-+ My project was to examine statistical modelling approaches for these data.
+### My project was to examine statistical modelling approaches for these data.
 
 ---
 ## Project overview
@@ -148,32 +155,12 @@ Patient safety movement is reasonably new, established in the 80s through the li
   + Little-to-no useful parameters for modelling
   + No obvious orthogonal outcome
   + Reporting is highly organisation-specific
-  
 
-  
-+ __Only quantitative approach is 'counting'__
-  + Created a 'panel' dataset - per organisation, per month
-  + Other predictors from HES: APC, OP & AE
-  + Multi-level model assumption due to clustering
-  + Overdispersion modelled various ways
+{{content}}
+
 ]
 
---
 
-.right-column[
-+ __Output approaches for __
-  + How do we use risk-adjusted output to form indicators?
-  + Visualisation of organisations
-    + Cross-sectional
-    + Longitudinal
-
-<br>
-+ __Natural Language Processing__
-  + Examining how to create a useful dataset
-  + Visualisation of processes
-  + Identify topics in the data
-  + Predictive modelling of harm level from text (83% accuracy)
-]
 
 ???
 
@@ -188,6 +175,39 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
    
 + NLP methods
 
+--
+
++ __Only quantitative approach is 'counting'__
+  + Created a 'panel' dataset - per organisation, per month
+  + Other predictors from HES: APC, OP & AE
+  + Multi-level model assumption due to clustering
+  + Overdispersion modelled various ways
+
+
+--
+
+.right-column[
++ __Output approaches for __
+  + How do we use risk-adjusted output to form indicators?
+  + Visualisation of organisations
+    + Cross-sectional
+    + Longitudinal
+
+<br>
+
+{{content}}
+
+]
+
+--
+
++ __Natural Language Processing__
+  + Examining how to create a useful dataset
+  + Visualisation of processes
+  + Identify topics in the data
+  + Predictive modelling of harm level from text (83% accuracy)
+
+
 
 ---
 ## Analytical methods (1)
@@ -196,6 +216,21 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
 + `SQL Server Database` - ETL
 + Required manual `SAS` correction for 'delimiting' problems
 + Panel created using a 'calendar table', join all tables and aggregate per month, per trust.
+
+???
+
+__End 5:00__
+
++ Had to start all the way back with how do we get extracts, as NRLS is not static.  Needed system to chose mose recent updated.
+
++ Problems with delimiters - required diagnosing and manual SAS process
+
++ ETL and warehousing
+
++ Extraction into reporting tables as 'counts per day'
+ + HES isn't per day, it's episodes.  So per day, is a spell happening?
+ + Investigated different methods of bed-day calculation, depending on which you chose, you can call day cases zero time in hospital.
+
 
 --
 
@@ -212,19 +247,6 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
 + Mixture/compound distribution models `r Citep(bib, "sellersFlexibleRegressionModel2010")`
 
 
-???
-
-__End 5:00__
-
-+ Had to start all the way back with how do we get extracts, as NRLS is not static.  Needed system to chose mose recent updated.
-
-+ Problems with delimiters - required diagnosing and manual SAS process
-
-+ ETL and warehousing
-
-+ Extraction into reporting tables as 'counts per day'
- + HES isn't per day, it's episodes.  So per day, is a spell happening?
- + Investigated different methods of bed-day calculation, depending on which you chose, you can call day cases zero time in hospital.
 
 ---
 
@@ -232,12 +254,18 @@ __End 5:00__
 
 .pull-left[
 
-Overdispersion, where conditional variance is greater than conditional mean, occurs when:
+___Overdispersion___, where conditional variance is greater than conditional mean, occurs when:
 
 1. Aggregation / Discretization
 1. Mis-specified predictors/model
 1. Presence of outliers
 1. Variation between response probabilities (heterogeneity)
+
+{{content}}
+
+]
+
+--
 
 __Repeated measures (correlation) __
 
@@ -245,8 +273,7 @@ __Repeated measures (correlation) __
 + Sampling from same organisations repeatedly
 + Clustered: - local means
 
-
-]
+--
 
 .pull-right[
 ![](./assets/img/ints.gif)
@@ -266,13 +293,22 @@ __End 6:00__
 
 ## Analytical methods (3)
 
+.pull-left[
 ###Advances on Poisson regression
 
-+ Generalized Additive Models (GAM): `r Citep(bib, "woodGeneralizedAdditiveModels2006")` - smoothed functions of predictors
++ Generalized Additive Models (GAM):`r Citep(bib, "woodGeneralizedAdditiveModels2006")` 
+  + smoothed functions of predictors
 
-+ Tree methods: trees, boosting, bagging & Random Forests `r Citep(bib, c("breimanBaggingPredictors1996", "friedmanStochasticGradientBoosting2002", "breimanRandomForests2001"))`
++ Tree methods: 
+  + "Boosting" `r Citep(bib,"friedmanStochasticGradientBoosting2002")`
+  + "Bagging" & Random Forests `r Citep(bib, c("breimanBaggingPredictors1996", "breimanRandomForests2001"))`
 
 + Neural Networks `r Citep(bib, "hastieElementsStatisticalLearning2009")`
+]
+
+--
+
+.pull-right[
 
 ### Use of models
 
@@ -283,6 +319,8 @@ __End 6:00__
 + Funnel plots `r Citep(bib, "spiegelhalterFunnelPlotsComparing2005")`
 
 + Control charting  `r Citep(bib, "woodallUseControlCharts2006")`
+
+]
 
 ???
 
@@ -328,7 +366,7 @@ Key that the free-text description contains real signal, but can't manually read
 The key issue here is that there are ~500,000 reports per year.
 National Clinical review team of 3 -5 depending on project, so they focus on severe harm and death.
 With routing research and other work, maybe a further 2% are systematically reviewed.
-This means 98% are not reviewerd and, to my mind, 'begging' for some methods of finding a signal.
+This means 98% are not reviewed and, to my mind, 'begging' for some methods of finding a signal.
 
 This is where text methods come in.
 
@@ -343,7 +381,7 @@ Naturally poorer at predicting these, but interesting finding what that Random F
 
 + HED interactive 'module' allowing - NHSEI prevented launch of this, but techniques used to improve several other parts of HED.
 
-+ Recommendations for modelling shared with organisations.
++ Recommendations for modelling shared with organisations:
 
  + NHSD now investigating some of methods for SHMI.
  + NHSEI simple method of 'under-reporting' greatly advanced by these models.
@@ -387,7 +425,7 @@ class: inverse center middle
 
 .pull-right[
 
-```{r funnel, echo=FALSE, out.height=300, out.width=600, fig.height=4, fig.width=6, dpi=400, message=FALSE, warning=FALSE}
+```{r funnel, echo=FALSE, out.height=300, out.width=600, fig.height=4, fig.width=6, dpi=400, message=FALSE, warning=FALSE, fig.alt="Example funnel plot", fig.link="https://github.com/nhs-r-community/FunnelPlotR"}
 library(COUNT)
 library(FunnelPlotR)
 library(dplyr)
@@ -424,21 +462,20 @@ First point:  reduces confounding, but sometimes increases bias and is at the ex
 ---
 
 ## Monitoring SMRs over time
-
-+ SMRs are generally cross-sectional, as they are single time-point calculations.
-
 .pull-left[
-
 ### Risk-adjusted cusum charts
 
-+ Many control chart methods, but need appropriate error structure
- + Risk-adjustment
- + CQC outliers programme  .footnote[1]
++ Two differing approaches:
+ + CQC outliers programme
  + Dr Foster's cususm alerts 
 
-+ Organisations don't understand it as a 'diagnostic test'
++ Organisations don't understand as 'diagnostic test'
+
+{{content}}
 
 ]
+
+
 
 .pull-right[
 
@@ -446,8 +483,8 @@ First point:  reduces confounding, but sometimes increases bias and is at the ex
 <img src="./assets/img/agg_cusum.gif" alt="Aggregate cusum chart" width = "400" height="200">
 <img src="./assets/img/person_cusum.gif" alt="Person-level cusum chart" width = "400" height="200">
 </p>
-]
 
+]
 
 ???
 
@@ -458,32 +495,16 @@ Dr Foster Intelligence created an industry or 'alerting' trusts to risks - based
 
 The diagnostic test, the same in any machine learning prediction model, is essential.  In epidemiology and machine learning we might construct a 2x2 table, or confusion matrix, with our predictions v.s. truth.  Assess quality of model, but there are always some false positive and negatives.  There is a trade-off between 'sensitivity' and 'specificity':  You can catch more with a lower threshold, but you'll get more false positives.  Extreme of this is to treat every data point as positive.
 This has resource implications - requiring clinical review and often highlighting data quality or statistical issues.
-
-
----
-
-## Project overview
-
-+ __Aim: Reduce confusion of users, and strike the balance between true and false positives__
-
 --
 
-+ Initially applied to HSMR:
-  + SHMI commonly uses a 'VLAD' chart `r Citep(bib, "lovegroveMonitoringPerformanceCardiac1999", .opts = list(max.names=2))` , but control limits are CUSUMs. `r Citep(bib, "sherlaw-johnsonMethodDetectingRuns2005", .opts = list(max.names=2))`
-  + SHMI planned for second phase (after I left UHB).
-  
++ Unclear why there were differences:
+  + Aggregation
+  + Trigger limit
+  + 'Window' size
 
-+ Unclear why there were difference control limits and methods.
-  + Which was 'best'? and do the compare?
-  
---
-
-### Statistical and literature review process
-
-+ Aggregation
-+ Trigger limit
-+ 'Window' size
 + __Both claimed false discovery rate (FDR) of 0.1%__
+
+
 
 ---
 
@@ -492,7 +513,8 @@ This has resource implications - requiring clinical review and often highlightin
 .pull-left[
 ### CQC
 + Data are transformed to z-scores
-+ Global trigger (5.48) - can convert average run-length to FDR, and set threshold `r Citep(bib, c("griggNullSteadystateDistribution2008", "carequalitycommissioncqcNHSAcuteHospitals2014"), .opts = list(max.names=2))`
++ Global trigger (5.48) - 
+  + Can convert average run-length to FDR, and set threshold `r Citep(bib, c("griggNullSteadystateDistribution2008", "carequalitycommissioncqcNHSAcuteHospitals2014"), .opts = list(max.names=2))`
 + Applicable to other indicators and groupings, subject to transformation
 + Tested in R, translated in `SQL` procedures for calculation against all trusts and diagnosis groups
 ]
@@ -501,25 +523,39 @@ This has resource implications - requiring clinical review and often highlightin
 
 .pull-right[
 ### DFI
-+ Binomial assumption and false positives used to set threshold through simulation. `r Citep(bib,"bottlePredictingFalseAlarm2011", .opts = list(max.names=2))`
-+ Intractable to calculate each month, and authors fitted a set of prediction equations.
-+ Wrote program to solve for each trust/diagnosis group with non-linear optimiser (`R`)
++ Binomial assumption and threshold set through simulation of average run-length to false positives. `r Citep(bib,"bottlePredictingFalseAlarm2011", .opts = list(max.names=2))`
++ Unique to each trust / group / reporting period.
++ Intractable to calculate each month, and authors fitted a set of descriptive equations.
++ Wrote program to solve equations for each group with non-linear optimiser (`R`)
 + Translated into similar `SQL` process, with call to `R`
 
 ]
 
---
-
-### Other issues
-
-+ Takes too long: Iterative - 'quirky update'.
-+ Different aggregation has to be considered in design, and progress routes, through analytical tool.
-+ Educate trusts on false-positive argument and build confidence.
-
 ---
 
-# Final Output
+## Delivery and presentation
 
+### Technical
+
++ Takes too long!
+  + Iterative ~ 160 organisations \* 260 diagnosis groups \* 2 methods.
+  + Tested multiple languages and data structures, designs
+  + SQL 'quirky update' - best performance
+
+
+--
+
+### Display
+
++ Important to place charts together to see trigger times
+  + Different aggregations
++ Balance of detail and simplicity
++ Linked to email alerts and dashboard summary
++ Patient details - audit
+
+--
+
+__Educate trusts on false-positive argument and build confidence, and skills to investigate.__
 
 
 ---
@@ -528,7 +564,7 @@ class: references
 ### References (1)
 
 ```{r, results='asis', echo=FALSE}
-PrintBibliography(bib, end = 15)
+PrintBibliography(bib, end = 14)
 ```
 
 ---
@@ -537,5 +573,5 @@ class: references
 ### References (2)
 
 ```{r, results='asis', echo=FALSE}
-PrintBibliography(bib, start = 16)
+PrintBibliography(bib, start = 15)
 ```

@@ -1,0 +1,18 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Chief Analyst Interview Presentation
+
+This is my presentation for interview with The Health Economics unit.
+
+Click here to access the slides in you browser:  https://chrismainey.github.io/chief_analyst_presentation/chief_analyst_interview.html

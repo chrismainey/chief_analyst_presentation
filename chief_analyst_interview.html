@@ -4,12 +4,13 @@
     <title>Chief Analyst Interview - The Health Economics Unit</title>
     <meta charset="utf-8" />
     <meta name="author" content="Chris Mainey" />
-    <meta name="date" content="2022-01-30" />
+    <meta name="date" content="2022-02-01" />
     <script src="chief_analyst_interview_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
+
 
 
 
@@ -77,11 +78,24 @@ class: inverse center middle
 ---
 ## Analysing Incident Data
 
-+ My PhD Project: &lt;a name=cite-maineyStatisticalMethodsNHS2020&gt;&lt;/a&gt;([Mainey, 2020](#bib-maineyStatisticalMethodsNHS2020)) [thesis available here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
++ My PhD Project: &lt;a name=cite-maineyStatisticalMethodsNHS2020&gt;&lt;/a&gt;([Mainey, 2020](https://discovery.ucl.ac.uk/id/eprint/10094736/)) thesis available [here](https://discovery.ucl.ac.uk/id/eprint/10094736/)
 
 + Patient Safety movement in England has encourage national incident reporting (NRLS)
  + Routed in visible failures in care such as Mid Staffs and Bristol
  + Harvard Medical Practice study &lt;a name=cite-leapeNatureAdverseEvents1991&gt;&lt;/a&gt;([Leape Brennan, et al., 1991](https://doi.org/10/fhvzbs)), 'Too Err is Human' &lt;a name=cite-kohnErrHumanBuilding2000&gt;&lt;/a&gt;([Kohn Corrigan, et al., 2000](#bib-kohnErrHumanBuilding2000)), 'An organisation with a memory' &lt;a name=cite-donaldsonOrganisationMemory2002&gt;&lt;/a&gt;([Donaldson, 2002](https://doi.org/10/gfz5w4))
+
+???
+Patient safety movement is reasonably new, established in the 80s through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often 'imported' from high-risk industries, and incident reporting was ported over, but fairly different in healthcare.
+
++ National Reporting and Learning System (NRLS) is the national repository for incident data
+
+### Commonly, with a national dataset there is a desire to use it for benchmarking
+
+__End 2:30__
+
++ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety discipline - about encouraging reporting to learn.
+
++ Still desire to understand reporting patterns, but clinical review is main way to use signal.
 
 --
 
@@ -101,17 +115,7 @@ class: inverse center middle
 
 ???
 
-__End 2:30__
-
-Patient safety movement is reasonably new, established in the 80s through the like of Harvard medical practice study, and the reading, or clinical audit of patient notes and reflections on harm.  Often 'imported' from high-risk industries, and incident reporting was ported over, but fairly different in healthcare.
-
-+ National Reporting and Learning System (NRLS) is the national repository for incident data
-
-+ Desire to compare organisations, and often to 'point the finger', but this is actually at odds with the Patient Safety discipline - about encouraging reporting to learn.
-
-+ Still desire to understand reporting patterns, but clinical review is main way to use signal.
-
-+ My project was to examine statistical modelling approaches for these data.
+### My project was to examine statistical modelling approaches for these data.
 
 ---
 ## Project overview
@@ -124,32 +128,12 @@ Patient safety movement is reasonably new, established in the 80s through the li
   + Little-to-no useful parameters for modelling
   + No obvious orthogonal outcome
   + Reporting is highly organisation-specific
-  
 
-  
-+ __Only quantitative approach is 'counting'__
-  + Created a 'panel' dataset - per organisation, per month
-  + Other predictors from HES: APC, OP &amp; AE
-  + Multi-level model assumption due to clustering
-  + Overdispersion modelled various ways
+{{content}}
+
 ]
 
---
 
-.right-column[
-+ __Output approaches for __
-  + How do we use risk-adjusted output to form indicators?
-  + Visualisation of organisations
-    + Cross-sectional
-    + Longitudinal
-
-&lt;br&gt;
-+ __Natural Language Processing__
-  + Examining how to create a useful dataset
-  + Visualisation of processes
-  + Identify topics in the data
-  + Predictive modelling of harm level from text (83% accuracy)
-]
 
 ???
 
@@ -164,6 +148,39 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
    
 + NLP methods
 
+--
+
++ __Only quantitative approach is 'counting'__
+  + Created a 'panel' dataset - per organisation, per month
+  + Other predictors from HES: APC, OP &amp; AE
+  + Multi-level model assumption due to clustering
+  + Overdispersion modelled various ways
+
+
+--
+
+.right-column[
++ __Output approaches for __
+  + How do we use risk-adjusted output to form indicators?
+  + Visualisation of organisations
+    + Cross-sectional
+    + Longitudinal
+
+&lt;br&gt;
+
+{{content}}
+
+]
+
+--
+
++ __Natural Language Processing__
+  + Examining how to create a useful dataset
+  + Visualisation of processes
+  + Identify topics in the data
+  + Predictive modelling of harm level from text (83% accuracy)
+
+
 
 ---
 ## Analytical methods (1)
@@ -172,6 +189,21 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
 + `SQL Server Database` - ETL
 + Required manual `SAS` correction for 'delimiting' problems
 + Panel created using a 'calendar table', join all tables and aggregate per month, per trust.
+
+???
+
+__End 5:00__
+
++ Had to start all the way back with how do we get extracts, as NRLS is not static.  Needed system to chose mose recent updated.
+
++ Problems with delimiters - required diagnosing and manual SAS process
+
++ ETL and warehousing
+
++ Extraction into reporting tables as 'counts per day'
+ + HES isn't per day, it's episodes.  So per day, is a spell happening?
+ + Investigated different methods of bed-day calculation, depending on which you chose, you can call day cases zero time in hospital.
+
 
 --
 
@@ -188,19 +220,6 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
 + Mixture/compound distribution models &lt;a name=cite-sellersFlexibleRegressionModel2010&gt;&lt;/a&gt;([Sellers and Shmueli, 2010](https://doi.org/10/cn6mjv))
 
 
-???
-
-__End 5:00__
-
-+ Had to start all the way back with how do we get extracts, as NRLS is not static.  Needed system to chose mose recent updated.
-
-+ Problems with delimiters - required diagnosing and manual SAS process
-
-+ ETL and warehousing
-
-+ Extraction into reporting tables as 'counts per day'
- + HES isn't per day, it's episodes.  So per day, is a spell happening?
- + Investigated different methods of bed-day calculation, depending on which you chose, you can call day cases zero time in hospital.
 
 ---
 
@@ -208,12 +227,18 @@ __End 5:00__
 
 .pull-left[
 
-Overdispersion, where conditional variance is greater than conditional mean, occurs when:
+___Overdispersion___, where conditional variance is greater than conditional mean, occurs when:
 
 1. Aggregation / Discretization
 1. Mis-specified predictors/model
 1. Presence of outliers
 1. Variation between response probabilities (heterogeneity)
+
+{{content}}
+
+]
+
+--
 
 __Repeated measures (correlation) __
 
@@ -221,8 +246,7 @@ __Repeated measures (correlation) __
 + Sampling from same organisations repeatedly
 + Clustered: - local means
 
-
-]
+--
 
 .pull-right[
 ![](./assets/img/ints.gif)
@@ -242,13 +266,22 @@ __End 6:00__
 
 ## Analytical methods (3)
 
+.pull-left[
 ###Advances on Poisson regression
 
-+ Generalized Additive Models (GAM): &lt;a name=cite-woodGeneralizedAdditiveModels2006&gt;&lt;/a&gt;([Wood, 2006](#bib-woodGeneralizedAdditiveModels2006)) - smoothed functions of predictors
++ Generalized Additive Models (GAM):&lt;a name=cite-woodGeneralizedAdditiveModels2006&gt;&lt;/a&gt;([Wood, 2006](#bib-woodGeneralizedAdditiveModels2006)) 
+  + smoothed functions of predictors
 
-+ Tree methods: trees, boosting, bagging &amp; Random Forests &lt;a name=cite-breimanBaggingPredictors1996&gt;&lt;/a&gt;&lt;a name=cite-friedmanStochasticGradientBoosting2002&gt;&lt;/a&gt;&lt;a name=cite-breimanRandomForests2001&gt;&lt;/a&gt;([Breiman, 1996](https://doi.org/10/fm3fwj); [Friedman, 2002](https://doi.org/10/fxb956); [Breiman, 2001a](https://doi.org/10/d8zjwq))
++ Tree methods: 
+  + "Boosting" &lt;a name=cite-friedmanStochasticGradientBoosting2002&gt;&lt;/a&gt;([Friedman, 2002](https://doi.org/10/fxb956))
+  + "Bagging" &amp; Random Forests &lt;a name=cite-breimanBaggingPredictors1996&gt;&lt;/a&gt;&lt;a name=cite-breimanRandomForests2001&gt;&lt;/a&gt;([Breiman, 1996](https://doi.org/10/fm3fwj); [Breiman, 2001](https://doi.org/10/d8zjwq))
 
 + Neural Networks &lt;a name=cite-hastieElementsStatisticalLearning2009&gt;&lt;/a&gt;([Hastie, Tibshirani, and Friedman, 2009](#bib-hastieElementsStatisticalLearning2009))
+]
+
+--
+
+.pull-right[
 
 ### Use of models
 
@@ -259,6 +292,8 @@ __End 6:00__
 + Funnel plots &lt;a name=cite-spiegelhalterFunnelPlotsComparing2005&gt;&lt;/a&gt;([Spiegelhalter, 2005a](https://doi.org/10/fq7z8t))
 
 + Control charting  &lt;a name=cite-woodallUseControlCharts2006&gt;&lt;/a&gt;([Woodall, 2006](https://doi.org/10/gjzktt))
+
+]
 
 ???
 
@@ -304,7 +339,7 @@ Key that the free-text description contains real signal, but can't manually read
 The key issue here is that there are ~500,000 reports per year.
 National Clinical review team of 3 -5 depending on project, so they focus on severe harm and death.
 With routing research and other work, maybe a further 2% are systematically reviewed.
-This means 98% are not reviewerd and, to my mind, 'begging' for some methods of finding a signal.
+This means 98% are not reviewed and, to my mind, 'begging' for some methods of finding a signal.
 
 This is where text methods come in.
 
@@ -319,7 +354,7 @@ Naturally poorer at predicting these, but interesting finding what that Random F
 
 + HED interactive 'module' allowing - NHSEI prevented launch of this, but techniques used to improve several other parts of HED.
 
-+ Recommendations for modelling shared with organisations.
++ Recommendations for modelling shared with organisations:
 
  + NHSD now investigating some of methods for SHMI.
  + NHSEI simple method of 'under-reporting' greatly advanced by these models.
@@ -363,7 +398,7 @@ class: inverse center middle
 
 .pull-right[
 
-&lt;img src="chief_analyst_interview_files/figure-html/funnel-1.png" width="600" height="300" /&gt;
+&lt;a href="https://github.com/nhs-r-community/FunnelPlotR" target="_blank"&gt;&lt;img src="chief_analyst_interview_files/figure-html/funnel-1.png" title="Example funnel plot" alt="Example funnel plot" width="600" height="300" /&gt;&lt;/a&gt;
 
 ]
 
@@ -374,21 +409,20 @@ First point:  reduces confounding, but sometimes increases bias and is at the ex
 ---
 
 ## Monitoring SMRs over time
-
-+ SMRs are generally cross-sectional, as they are single time-point calculations.
-
 .pull-left[
-
 ### Risk-adjusted cusum charts
 
-+ Many control chart methods, but need appropriate error structure
- + Risk-adjustment
- + CQC outliers programme  .footnote[1]
++ Two differing approaches:
+ + CQC outliers programme
  + Dr Foster's cususm alerts 
 
-+ Organisations don't understand it as a 'diagnostic test'
++ Organisations don't understand as 'diagnostic test'
+
+{{content}}
 
 ]
+
+
 
 .pull-right[
 
@@ -396,8 +430,8 @@ First point:  reduces confounding, but sometimes increases bias and is at the ex
 &lt;img src="./assets/img/agg_cusum.gif" alt="Aggregate cusum chart" width = "400" height="200"&gt;
 &lt;img src="./assets/img/person_cusum.gif" alt="Person-level cusum chart" width = "400" height="200"&gt;
 &lt;/p&gt;
-]
 
+]
 
 ???
 
@@ -408,32 +442,16 @@ Dr Foster Intelligence created an industry or 'alerting' trusts to risks - based
 
 The diagnostic test, the same in any machine learning prediction model, is essential.  In epidemiology and machine learning we might construct a 2x2 table, or confusion matrix, with our predictions v.s. truth.  Assess quality of model, but there are always some false positive and negatives.  There is a trade-off between 'sensitivity' and 'specificity':  You can catch more with a lower threshold, but you'll get more false positives.  Extreme of this is to treat every data point as positive.
 This has resource implications - requiring clinical review and often highlighting data quality or statistical issues.
-
-
----
-
-## Project overview
-
-+ __Aim: Reduce confusion of users, and strike the balance between true and false positives__
-
 --
 
-+ Initially applied to HSMR:
-  + SHMI commonly uses a 'VLAD' chart &lt;a name=cite-lovegroveMonitoringPerformanceCardiac1999&gt;&lt;/a&gt;([Lovegrove Sherlaw-Johnson, et al., 1999](https://doi.org/10/dtsvbg)) , but control limits are CUSUMs. &lt;a name=cite-sherlaw-johnsonMethodDetectingRuns2005&gt;&lt;/a&gt;([Sherlaw-Johnson, 2005](https://doi.org/10/dpvrft))
-  + SHMI planned for second phase (after I left UHB).
-  
++ Unclear why there were differences:
+  + Aggregation
+  + Trigger limit
+  + 'Window' size
 
-+ Unclear why there were difference control limits and methods.
-  + Which was 'best'? and do the compare?
-  
---
-
-### Statistical and literature review process
-
-+ Aggregation
-+ Trigger limit
-+ 'Window' size
 + __Both claimed false discovery rate (FDR) of 0.1%__
+
+
 
 ---
 
@@ -442,7 +460,8 @@ This has resource implications - requiring clinical review and often highlightin
 .pull-left[
 ### CQC
 + Data are transformed to z-scores
-+ Global trigger (5.48) - can convert average run-length to FDR, and set threshold &lt;a name=cite-griggNullSteadystateDistribution2008&gt;&lt;/a&gt;&lt;a name=cite-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;([Grigg and Spiegelhalter, 2008](https://doi.org/10/bgvkdx); [Commission", 2014](#bib-carequalitycommissioncqcNHSAcuteHospitals2014))
++ Global trigger (5.48) - 
+  + Can convert average run-length to FDR, and set threshold &lt;a name=cite-griggNullSteadystateDistribution2008&gt;&lt;/a&gt;&lt;a name=cite-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;([Grigg and Spiegelhalter, 2008](https://doi.org/10/bgvkdx); [Care Quality Commission, 2014](#bib-carequalitycommissioncqcNHSAcuteHospitals2014))
 + Applicable to other indicators and groupings, subject to transformation
 + Tested in R, translated in `SQL` procedures for calculation against all trusts and diagnosis groups
 ]
@@ -451,25 +470,39 @@ This has resource implications - requiring clinical review and often highlightin
 
 .pull-right[
 ### DFI
-+ Binomial assumption and false positives used to set threshold through simulation. &lt;a name=cite-bottlePredictingFalseAlarm2011&gt;&lt;/a&gt;([Bottle and Aylin, 2011](https://doi.org/10/cbr4rq))
-+ Intractable to calculate each month, and authors fitted a set of prediction equations.
-+ Wrote program to solve for each trust/diagnosis group with non-linear optimiser (`R`)
++ Binomial assumption and threshold set through simulation of average run-length to false positives. &lt;a name=cite-bottlePredictingFalseAlarm2011&gt;&lt;/a&gt;([Bottle and Aylin, 2011](https://doi.org/10/cbr4rq))
++ Unique to each trust / group / reporting period.
++ Intractable to calculate each month, and authors fitted a set of descriptive equations.
++ Wrote program to solve equations for each group with non-linear optimiser (`R`)
 + Translated into similar `SQL` process, with call to `R`
 
 ]
 
---
-
-### Other issues
-
-+ Takes too long: Iterative - 'quirky update'.
-+ Different aggregation has to be considered in design, and progress routes, through analytical tool.
-+ Educate trusts on false-positive argument and build confidence.
-
 ---
 
-# Final Output
+## Delivery and presentation
 
+### Technical
+
++ Takes too long!
+  + Iterative ~ 160 organisations \* 260 diagnosis groups \* 2 methods.
+  + Tested multiple languages and data structures, designs
+  + SQL 'quirky update' - best performance
+
+
+--
+
+### Display
+
++ Important to place charts together to see trigger times
+  + Different aggregations
++ Balance of detail and simplicity
++ Linked to email alerts and dashboard summary
++ Patient details - audit
+
+--
+
+__Educate trusts on false-positive argument and build confidence, and skills to investigate.__
 
 
 ---
@@ -494,7 +527,7 @@ In: _Machine Learning_ 24.2, pp. 123-140. ISSN: 1573-0565. DOI:
 [10/fm3fwj](https://doi.org/10%2Ffm3fwj).
 
 &lt;a name=bib-breimanRandomForests2001&gt;&lt;/a&gt;[Breiman,
-L.](#cite-breimanRandomForests2001) (2001a). "Random Forests". In:
+L.](#cite-breimanRandomForests2001) (2001). "Random Forests". In:
 _Machine Learning_ 45.1, pp. 5-32. ISSN: 08856125. DOI:
 [10/d8zjwq](https://doi.org/10%2Fd8zjwq).
 
@@ -505,11 +538,11 @@ summary hospital mortality index: retrospective analysis in English
 hospitals over five years". In: _BMJ_ 344, p. e1001. DOI:
 [10/gb3r9t](https://doi.org/10%2Fgb3r9t).
 
-&lt;a
-name=bib-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;[Commission",
-". Q.](#cite-carequalitycommissioncqcNHSAcuteHospitals2014) (2014).
-_NHS acute hospitals: Statistical Methodology_. Care Quality Commission
-(CQC).
+&lt;a name=bib-carequalitycommissioncqcNHSAcuteHospitals2014&gt;&lt;/a&gt;[Care
+Quality
+Commission](#cite-carequalitycommissioncqcNHSAcuteHospitals2014)
+(2014). _NHS acute hospitals: Statistical Methodology_. Care Quality
+Commission (CQC).
 
 &lt;a name=bib-donaldsonOrganisationMemory2002&gt;&lt;/a&gt;[Donaldson,
 L.](#cite-donaldsonOrganisationMemory2002) (2002). "An organisation
@@ -554,17 +587,10 @@ Brennan, N. Laird, et al.](#cite-leapeNatureAdverseEvents1991) (1991).
 England Journal of Medicine_ 324.6, pp. 377-384. DOI:
 [10/fhvzbs](https://doi.org/10%2Ffhvzbs).
 
-&lt;a name=bib-lovegroveMonitoringPerformanceCardiac1999&gt;&lt;/a&gt;[Lovegrove,
-J., C. Sherlaw-Johnson, O. Valencia, et
-al.](#cite-lovegroveMonitoringPerformanceCardiac1999) (1999).
-"Monitoring the Performance of Cardiac Surgeons". In: _The Journal of
-the Operational Research Society_ 50.7. Publisher: Palgrave Macmillan
-Journals, pp. 684-689. ISSN: 01605682, 14769360. DOI:
-[10/dtsvbg](https://doi.org/10%2Fdtsvbg).
-
 &lt;a name=bib-maineyStatisticalMethodsNHS2020&gt;&lt;/a&gt;[Mainey,
 C.](#cite-maineyStatisticalMethodsNHS2020) (2020). "Statistical methods
-for NHS incident reporting data". London.
+for NHS incident reporting data". London. URL:
+[https://discovery.ucl.ac.uk/id/eprint/10094736/](https://discovery.ucl.ac.uk/id/eprint/10094736/).
 
 ---
 class: references
@@ -573,23 +599,15 @@ class: references
 
 &lt;a name=bib-poissonRecherchesProbabiliteJugements1837&gt;&lt;/a&gt;[Poisson, S.
 D.](#cite-poissonRecherchesProbabiliteJugements1837) (1837).
-_Recherches sur la probabilitÃ© des jugements en matiÃ¨re criminelle et
-en matiÃ¨re civile: prÃ©cÃ©dÃ©es des rÃ¨gles gÃ©nÃ©rales du calcul des
-probabilitÃ©s_. Bachelier.
+_Recherches sur la probabilité des jugements en matiére criminelle et
+en matière civile: précédées des règles générales du calcul des
+probabilités_. Bachelier.
 
 &lt;a name=bib-sellersFlexibleRegressionModel2010&gt;&lt;/a&gt;[Sellers, K. F. and
 G. Shmueli](#cite-sellersFlexibleRegressionModel2010) (2010). "A
 flexible regression model for count data". In: _Annals of Applied
 Statistics_ 4.2, pp. 943-961. ISSN: 1932-6157. DOI:
 [10/cn6mjv](https://doi.org/10%2Fcn6mjv).
-
-&lt;a
-name=bib-sherlaw-johnsonMethodDetectingRuns2005&gt;&lt;/a&gt;[Sherlaw-Johnson,
-C.](#cite-sherlaw-johnsonMethodDetectingRuns2005) (2005). "A Method for
-Detecting Runs of Good and Bad Clinical Outcomes on Variable
-Life-Adjusted Display (VLAD) Charts". In: _Health Care Management
-Science_ 8.1, pp. 61-65. ISSN: 1572-9389. DOI:
-[10/dpvrft](https://doi.org/10%2Fdpvrft).
 
 &lt;a name=bib-spiegelhalterFunnelPlotsComparing2005&gt;&lt;/a&gt;[Spiegelhalter,
 D. J.](#cite-spiegelhalterFunnelPlotsComparing2005) (2005a). "Funnel
