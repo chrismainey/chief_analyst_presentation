@@ -205,7 +205,7 @@ Deeply challenging review, as it was an ill-defined question: 'how has NRLS been
   + Examining how to create a useful dataset
   + Visualisation of processes
   + Identify topics in the data
-  + Predictive modelling of harm level from text (83% accuracy)
+  + Predictive modelling of harm level from text
 
 
 
